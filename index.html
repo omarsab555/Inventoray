@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal active">
+        <div class="modal-dialog modal-dialog--small">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Join Collaboration Session</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="userName">Enter your name to start:</label>
+                        <input type="text" id="userName" class="form-control" placeholder="Your name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--primary btn--full-width" id="joinSessionBtn">Join Session</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Inventory Pro</h2>
+            <div class="current-user">
+                <div class="user-avatar">👤</div>
+                <span id="currentUserName">You</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active" data-section="dashboard">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text">Dashboard</span>
+            </a>
+            <a href="#" class="menu-item" data-section="inventory">
+                <span class="menu-icon">📦</span>
+                <span class="menu-text">Inventory</span>
+            </a>
+            <a href="#" class="menu-item" data-section="categories">
+                <span class="menu-icon">🏷️</span>
+                <span class="menu-text">Categories</span>
+            </a>
+            <a href="#" class="menu-item" data-section="locations">
+                <span class="menu-icon">📍</span>
+                <span class="menu-text">Locations</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="online-users">
+                <h4>Online Users</h4>
+                <div id="onlineUsersList" class="users-list"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="section-header">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn--primary" id="addItemBtn">
+                        <span class="btn-icon">➕</span>
+                        Add Item
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalItems">0</div>
+                        <div class="stat-label">Total Items</div>
+                    </div>
+                    <div class="stat-icon">📦</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalValue">$0.00</div>
+                        <div class="stat-label">Total Value</div>
+                    </div>
+                    <div class="stat-icon">💰</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalProfit">$0.00</div>
+                        <div class="stat-label">Estimated Profit</div>
+                    </div>
+                    <div class="stat-icon">📈</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-number" id="activeUsers">1</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-icon">👥</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Quick Actions</h3>
+                        <div class="quick-actions">
+                            <button class="btn btn--secondary btn--full-width" id="scanBarcodeBtn">
+                                <span class="btn-icon">📱</span>
+                                Scan Barcode
+                            </button>
+                            <button class="btn btn--secondary btn--full-width" id="exportDataBtn">
+                                <span class="btn-icon">📤</span>
+                                Export Data
+                            </button>
+                            <button class="btn btn--secondary btn--full-width" id="importDataBtn">
+                                <span class="btn-icon">📥</span>
+                                Import Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Recent Activity</h3>
+                        <div id="activityList" class="activity-list">
+                            <div class="activity-item">
+                                <span class="activity-description">System initialized</span>
+                                <span class="activity-time">Now</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory Section -->
+        <section id="inventory" class="content-section">
+            <div class="section-header">
+                <h1>Inventory</h1>
+                <div class="header-actions">
+                    <button class="btn btn--primary" id="addItemBtn2">
+                        <span class="btn-icon">➕</span>
+                        Add Item
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="filters-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search items...">
+                </div>
+                <div class="filter-controls">
+                    <select id="categoryFilter" class="form-control">
+                        <option value="">All Categories</option>
+                    </select>
+                    <select id="locationFilter" class="form-control">
+                        <option value="">All Locations</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Items Grid -->
+            <div id="itemsGrid" class="items-grid">
+                <!-- Items will be rendered here -->
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories" class="content-section">
+            <div class="section-header">
+                <h1>Categories</h1>
+                <div class="header-actions">
+                    <button class="btn btn--primary" id="addCategoryBtn">
+                        <span class="btn-icon">➕</span>
+                        Add Category
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div id="categoriesList" class="categories-list">
+                        <!-- Categories will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Locations Section -->
+        <section id="locations" class="content-section">
+            <div class="section-header">
+                <h1>Locations</h1>
+                <div class="header-actions">
+                    <button class="btn btn--primary" id="addLocationBtn">
+                        <span class="btn-icon">➕</span>
+                        Add Location
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div id="locationsList" class="locations-list">
+                        <!-- Locations will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Item Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-dialog modal-dialog--large">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Add New Item</h3>
+                    <button type="button" class="modal-close" id="closeItemModal">&times;</button>
+                </div>
+                <form id="itemForm" class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="itemName">Item Name *</label>
+                            <input type="text" id="itemName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="itemCategory">Category *</label>
+                            <select id="itemCategory" class="form-control" required>
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="itemLocation">Location *</label>
+                            <select id="itemLocation" class="form-control" required>
+                                <option value="">Select Location</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="itemDescription">Description</label>
+                            <textarea id="itemDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="purchasePrice">Purchase Price *</label>
+                            <input type="number" id="purchasePrice" class="form-control" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sellingPrice">Selling Price *</label>
+                            <input type="number" id="sellingPrice" class="form-control" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="purchaseDate">Purchase Date</label>
+                            <input type="date" id="purchaseDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="warrantyUntil">Warranty Until</label>
+                            <input type="date" id="warrantyUntil" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="modelNumber">Model Number</label>
+                            <input type="text" id="modelNumber" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="serialNumber">Serial Number</label>
+                            <input type="text" id="serialNumber" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="barcode">Barcode</label>
+                            <input type="text" id="barcode" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="itemTags">Tags (comma separated)</label>
+                            <input type="text" id="itemTags" class="form-control" placeholder="electronics, valuable, portable">
+                        </div>
+                        <div class="form-group form-group--full">
+                            <label class="form-label" for="itemNotes">Notes</label>
+                            <textarea id="itemNotes" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group form-group--full">
+                            <label class="form-label" for="itemImage">Image</label>
+                            <input type="file" id="itemImage" class="form-control" accept="image/*">
+                            <div id="imagePreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="profit-display">
+                        <div class="profit-info">
+                            <span class="profit-label">Profit:</span>
+                            <span class="profit-amount" id="profitAmount">$0.00</span>
+                            <span class="profit-margin" id="profitMargin">(0%)</span>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline" id="cancelItemBtn">Cancel</button>
+                    <button type="submit" form="itemForm" class="btn btn--primary">Save Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-dialog modal-dialog--small">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="confirmTitle">Confirm Action</h3>
+                    <button type="button" class="modal-close" id="closeConfirmModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage">Are you sure you want to perform this action?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline" id="cancelConfirmBtn">Cancel</button>
+                    <button type="button" class="btn btn--primary" id="confirmActionBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conflict Resolution Modal -->
+    <div id="conflictModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Conflict Detected</h3>
+                    <button type="button" class="modal-close" id="closeConflictModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Another user has modified this item while you were editing. Please choose which version to keep:</p>
+                    <div class="conflict-versions">
+                        <div class="version-card">
+                            <h4>Your Version</h4>
+                            <div id="yourVersion" class="version-content"></div>
+                        </div>
+                        <div class="version-card">
+                            <h4>Remote Version</h4>
+                            <div id="remoteVersion" class="version-content"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline" id="keepYourVersion">Keep Your Version</button>
+                    <button type="button" class="btn btn--primary" id="keepRemoteVersion">Keep Remote Version</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
